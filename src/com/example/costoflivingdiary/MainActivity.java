@@ -82,7 +82,7 @@ public class MainActivity extends ListActivity {
 		addItems();
 	}
 
-	public PreferenceItem getDefaultPreference() {
+	public static PreferenceItem getDefaultPreference() {
 		for (PreferenceItem item : PREF_LIST) {
 			if (item.isDefault()) {
 				return item;

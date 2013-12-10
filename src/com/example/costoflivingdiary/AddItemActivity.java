@@ -30,7 +30,8 @@ public class AddItemActivity extends Activity{
 		mItemList = (Spinner) findViewById(R.id.itemDropDown);
 		List<String> list = new ArrayList<String>();
 		//TODO grab countries from prefs
-		String country = "Argentina"; //or whatver preference is
+		PreferenceItem prefItem = MainActivity.getDefaultPreference();
+		String country = prefItem.getPreference().replace(" ", "+");
 		String results = queryNumbeo(country);
 		//TODO parse out items from results here
 		String[] array = results.split(",\"item_name\":\"");
