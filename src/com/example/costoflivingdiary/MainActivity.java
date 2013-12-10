@@ -139,9 +139,14 @@ public class MainActivity extends ListActivity {
 				PreferenceItem prefItem = getDefaultPreference();
 				if (prefItem != null) {
 					String country = prefItem.getPreference();
+					if(country.contains(" ")){
+						country = country.replace(" ", "+");
+					}
 					String result = queryNumbeo(country);
-					
 					TreeMap<String, String> averagePrices = getAveragePrices(result);
+					if(country.contains("+")){
+						country = country.replace("+", " ");
+					}
 					pref.setText(country + ": " + averagePrices.get(item.getItem()));
 					
 				} else {
