@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/preferenceSettings"
+        android:orderInCategory="100"
+        android:title="Preference Settings"/>
+
+</menu>
