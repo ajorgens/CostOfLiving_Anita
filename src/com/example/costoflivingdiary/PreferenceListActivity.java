@@ -2,8 +2,10 @@ package com.example.costoflivingdiary;
 
 import java.util.ArrayList;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -75,6 +77,22 @@ public class PreferenceListActivity extends ListActivity {
             v.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                	builder.setMessage("Set " + item.getPreference() + " as the default?");
+                	builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                	           public void onClick(DialogInterface dialog, int id) {
+                	               for(PreferenceItem i: items) {
+                	            	   i.setDefault(false);
+                	               }
+                	               item.setDefault(true);
+                	           }
+                	       });
+                	builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                	           public void onClick(DialogInterface dialog, int id) {
+                	           }
+                	       });
+                	AlertDialog dialog = builder.create();
+                	dialog.show();
                 }
             });
 
@@ -85,6 +103,6 @@ public class PreferenceListActivity extends ListActivity {
 
             }       
             return v;           
-        }           
+        }
     }
 }

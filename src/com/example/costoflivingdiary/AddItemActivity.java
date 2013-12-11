@@ -28,6 +28,7 @@ public class AddItemActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.addcolitem);
 		
+		
 		/* fill spinner */
 		mItemList = (Spinner) findViewById(R.id.itemDropDown);
 		//List<String> list = new ArrayList<String>();
