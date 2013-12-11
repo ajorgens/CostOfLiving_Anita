@@ -316,6 +316,7 @@ public class MainActivity extends ListActivity {
 				writer.close();
 			}
 		}
+		
 	}
 
 }

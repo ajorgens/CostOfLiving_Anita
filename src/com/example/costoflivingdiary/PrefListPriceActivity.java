@@ -26,12 +26,14 @@ public class PrefListPriceActivity extends ListActivity {
 			for(int i = 0; i < MainActivity.PREF_LIST.size(); i++) {
 				//TODO get prices somehow
 				String country = MainActivity.PREF_LIST.get(i).getPreference();
-				String result = queryNumbeo(country.replace(" ", "+"));
-				TreeMap<String, String> current = getAveragePrices(result);
-				countryPrices.put(country, current);
+				if(countryPrices.get(country) == null){
+					String result = queryNumbeo(country.replace(" ", "+"));
+					TreeMap<String, String> current = getAveragePrices(result);
+					countryPrices.put(country, current);
+				}
 				ArrayList<CostOfLivingItem> items = MainActivity.LIST;
 				CostOfLivingItem item = items.get(index);
-				prefStringList.add("Price in " + country + ": " + current.get(item.getItem()));
+				prefStringList.add("Price in " + country + ": " + countryPrices.get(country).get(item.getItem()));
 			}
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                     R.layout.prefitem, R.id.prefEntry, prefStringList);
