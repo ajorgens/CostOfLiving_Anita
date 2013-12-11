@@ -25,4 +25,16 @@ public class PreferenceItem {
 	public void setDefault(boolean bool) {
 		mIsDefault = bool;
 	}
+	
+	@Override
+	public boolean equals(Object o){
+		if(o instanceof PreferenceItem){
+			PreferenceItem p = (PreferenceItem) o;
+			if(p.mPreference.equals(((PreferenceItem) o).mPreference)){
+				return true;
+			}
+		}
+		return false;
+		
+	}
 }

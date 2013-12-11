@@ -287,13 +287,17 @@ public class MainActivity extends ListActivity {
 				}catch(Exception e){
 					isDefault = false;
 				}
-				PREF_LIST.add(new PreferenceItem(pref, isDefault));
+				PreferenceItem itemPref = new PreferenceItem(pref, isDefault);
+				if(!PREF_LIST.contains(itemPref)){
+					PREF_LIST.add(itemPref);
+				}
 			}
-			if(PREF_LIST.size() < 1)
-				PREF_LIST.add(new PreferenceItem("United States", true));
+//			if(PREF_LIST.size() < 1)
+//				PREF_LIST.add(new PreferenceItem("United States", true));
 
 		} catch (FileNotFoundException e) {
 			Log.i(TAG, "File not found");
+			PREF_LIST.add(new PreferenceItem("United States", true));
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -324,6 +328,7 @@ public class MainActivity extends ListActivity {
 			writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
 					fos)));
 			for(CostOfLivingItem curr : LIST){
+				
 				writer.println(curr.getItem()+","+curr.getPriceString());
 			}
 			

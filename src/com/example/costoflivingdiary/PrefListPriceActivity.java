@@ -27,7 +27,7 @@ public class PrefListPriceActivity extends ListActivity {
 				//TODO get prices somehow
 				String country = MainActivity.PREF_LIST.get(i).getPreference();
 				if(countryPrices.get(country) == null){
-					String result = queryNumbeo(country.replace(" ", "+"));
+					String result = queryNumbeo(country.replace(" ", "+")).trim();
 					TreeMap<String, String> current = getAveragePrices(result);
 					countryPrices.put(country, current);
 				}

@@ -34,7 +34,7 @@ public class AddItemActivity extends Activity{
 		List<String> list = new ArrayList<String>();
 		//TODO grab countries from prefs
 		PreferenceItem prefItem = MainActivity.getDefaultPreference();
-		String country = prefItem.getPreference().replace(" ", "+");
+		String country = prefItem.getPreference().replace(" ", "+").trim();
 		String results = queryNumbeo(country);
 		//TODO parse out items from results here
 		String[] array = results.split(",\"item_name\":\"");
