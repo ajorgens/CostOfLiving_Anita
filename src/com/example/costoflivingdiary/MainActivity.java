@@ -291,7 +291,7 @@ public class MainActivity extends ListActivity {
 
 
 
-	protected void onDestory(){
+	protected void onDestroy(){
 		super.onDestroy();
 		//Save files
 		PrintWriter writer = null;

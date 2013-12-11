@@ -33,7 +33,8 @@ public class PrefListPriceActivity extends ListActivity {
 				}
 				ArrayList<CostOfLivingItem> items = MainActivity.LIST;
 				CostOfLivingItem item = items.get(index);
-				prefStringList.add("Price in " + country + ": " + countryPrices.get(country).get(item.getItem()));
+				String entry = "Price in " + country + ": " + countryPrices.get(country).get(item.getItem());
+				prefStringList.add(entry);
 			}
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                     R.layout.prefitem, R.id.prefEntry, prefStringList);

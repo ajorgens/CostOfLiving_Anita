@@ -21,8 +21,8 @@ public class AddItemActivity extends Activity{
 	private Button mCancel;
 	private Spinner mItemList;
 	private EditText mPrice;
-	private final String COUNTRY = "United+States";
-	private static final List<String> list = new ArrayList<String>();
+	//private final String COUNTRY = "United+States";
+	//private static final List<String> list = new ArrayList<String>();
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -31,20 +31,18 @@ public class AddItemActivity extends Activity{
 		
 		/* fill spinner */
 		mItemList = (Spinner) findViewById(R.id.itemDropDown);
-		//List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<String>();
 		//TODO grab countries from prefs
-		//PreferenceItem prefItem = MainActivity.getDefaultPreference();
-		//String country = prefItem.getPreference().replace(" ", "+");
-		if(list.isEmpty()){
-			String results = queryNumbeo(COUNTRY);
-			//TODO parse out items from results here
-			String[] array = results.split(",\"item_name\":\"");
-			for(String s : array){
-	        	if(!s.startsWith("{")){
-	        		String[] item = s.split("\",\"");
-	        		list.add(item[0]);		
-	        	}
-			}
+		PreferenceItem prefItem = MainActivity.getDefaultPreference();
+		String country = prefItem.getPreference().replace(" ", "+");
+		String results = queryNumbeo(country);
+		//TODO parse out items from results here
+		String[] array = results.split(",\"item_name\":\"");
+		for(String s : array){
+        	if(!s.startsWith("{")){
+        		String[] item = s.split("\",\"");
+        		list.add(item[0]);		
+        	}
 		}
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
 			android.R.layout.simple_spinner_item, list);
