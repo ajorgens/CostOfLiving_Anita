@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -56,11 +57,12 @@ public class PreferenceListActivity extends ListActivity {
     
     private class ItemAdapter extends ArrayAdapter<PreferenceItem> {
     	private ArrayList<PreferenceItem> items;
-    	
+    	private ItemAdapter adapter;
         public ItemAdapter(Context context, int textViewResourceId,
                 ArrayList<PreferenceItem> objects) {
             super(context, textViewResourceId, objects);
             this.items = objects;
+            adapter = this;
         }
         
         public View getView(int position, View convertView, ViewGroup parent){
@@ -95,7 +97,25 @@ public class PreferenceListActivity extends ListActivity {
                 	dialog.show();
                 }
             });
-
+            v.setOnLongClickListener( new OnLongClickListener() {
+            	public boolean onLongClick(View v) {
+                	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                	builder.setMessage("Delete " + item.getPreference() + "?");
+                	builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                	           public void onClick(DialogInterface dialog, int id) {
+                	              MainActivity.PREF_LIST.remove(pos);
+                	              adapter.notifyDataSetChanged();
+                	           }
+                	       });
+                	builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                	           public void onClick(DialogInterface dialog, int id) {
+                	           }
+                	       });
+                	AlertDialog dialog = builder.create();
+                	dialog.show();
+                	return true;
+                }
+            });
             if (item != null){
                 TextView pref = (TextView) v.findViewById(R.id.prefEntry); 
                 

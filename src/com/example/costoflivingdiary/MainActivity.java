@@ -15,14 +15,17 @@ import java.util.concurrent.TimeUnit;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -109,11 +112,12 @@ public class MainActivity extends ListActivity {
 
 	private class ItemAdapter extends ArrayAdapter<CostOfLivingItem> {
 		private ArrayList<CostOfLivingItem> items;
-
+		private ItemAdapter adapter;
 		public ItemAdapter(Context context, int textViewResourceId,
 				ArrayList<CostOfLivingItem> objects) {
 			super(context, textViewResourceId, objects);
 			this.items = objects;
+			adapter = this;
 		}
 
 		public View getView(int position, View convertView, ViewGroup parent) {
@@ -139,6 +143,26 @@ public class MainActivity extends ListActivity {
 					startActivity(intent);
 				}
 			});
+			 v.setOnLongClickListener( new OnLongClickListener() {
+	            	public boolean onLongClick(View v) {
+	                	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	                	builder.setMessage("Delete " + item.getItem() + "?");
+	                	builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+	                	           public void onClick(DialogInterface dialog, int id) {
+	                	              MainActivity.LIST.remove(pos);
+	                	              adapter.notifyDataSetChanged();
+	                	           }
+	                	       });
+	                	builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+	                	           public void onClick(DialogInterface dialog, int id) {
+	                	           }
+	                	       });
+	                	AlertDialog dialog = builder.create();
+	                	dialog.show();
+	                	return true;
+	                }
+	            });
+			 
 
 			if (item != null) {
 				TextView itemView = (TextView) v.findViewById(R.id.item);
