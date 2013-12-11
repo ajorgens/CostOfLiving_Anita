@@ -1,5 +1,14 @@
 package com.example.costoflivingdiary;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
@@ -22,7 +31,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class MainActivity extends ListActivity {
-
+	final static String SAVE_ITEM_FILE = "com.example.costoflivingdiary.itemlist";
+	final static String SAVE_PREF_FILE = "com.example.costoflivingdiary.preflist";
+	final static String TAG = "COST OF LIVING";
 	final static String ITEM_INDEX = "ITEM_INDEX";
 	final static ArrayList<CostOfLivingItem> LIST = new ArrayList<CostOfLivingItem>();
 	final static ArrayList<PreferenceItem> PREF_LIST = new ArrayList<PreferenceItem>();
@@ -32,8 +43,10 @@ public class MainActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		PREF_LIST.add(new PreferenceItem("United States", true));
-
+		//PREF_LIST.add(new PreferenceItem("United States", true));
+		loadPref();
+		loadItems();
+		addItems();
 		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		if (!mFooterAdded) {
 			mFooterAdded = true;
@@ -49,7 +62,6 @@ public class MainActivity extends ListActivity {
 			});
 			getListView().addFooterView(view);
 		}
-		addItems();
 	}
 
 	public void addItems() {
@@ -195,6 +207,114 @@ public class MainActivity extends ListActivity {
 				}
 			}
 			return q.results;
+		}
+	}
+	private void loadItems() {
+		BufferedReader reader = null;
+		
+		try {
+			FileInputStream fis = openFileInput(SAVE_ITEM_FILE);
+			reader = new BufferedReader(new InputStreamReader(fis));
+
+			String line, name = null;
+			String[] params;
+			float price;// = -1;
+			while (null != (line = reader.readLine())) {
+				params = line.split(",");
+				name = params[0];
+				try{
+					price = Float.parseFloat(params[1]);
+				}catch(Exception e){
+					price = -1;
+				}
+				LIST.add(new CostOfLivingItem(name, price));
+			}
+
+		} catch (FileNotFoundException e) {
+			Log.i(TAG, "File not found");
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (null != reader) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+	}
+	private void loadPref() {
+		BufferedReader reader = null;
+		
+		try {
+			FileInputStream fis = openFileInput(SAVE_PREF_FILE);
+			reader = new BufferedReader(new InputStreamReader(fis));
+
+			String line, pref = null;
+			String[] params;
+			boolean isDefault;// = -1;
+			while (null != (line = reader.readLine())) {
+				params = line.split(",");
+				pref = params[0];
+				try{
+					isDefault = Boolean.parseBoolean(params[1]);
+				}catch(Exception e){
+					isDefault = false;
+				}
+				PREF_LIST.add(new PreferenceItem(pref, isDefault));
+			}
+			if(PREF_LIST.size() < 1)
+				PREF_LIST.add(new PreferenceItem("United States", true));
+
+		} catch (FileNotFoundException e) {
+			Log.i(TAG, "File not found");
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (null != reader) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+	}
+
+
+
+
+
+
+
+
+	protected void onPause(){
+		super.onPause();
+		//Save files
+		PrintWriter writer = null;
+		try {
+			FileOutputStream fos = openFileOutput(SAVE_ITEM_FILE, MODE_PRIVATE);
+			writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
+					fos)));
+			for(CostOfLivingItem curr : LIST){
+				writer.println(curr.getItem()+","+curr.getPriceString());
+			}
+			
+			fos = openFileOutput(SAVE_PREF_FILE, MODE_PRIVATE);
+			writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
+					fos)));
+			for(PreferenceItem curr : PREF_LIST){
+				writer.println(curr.getPreference()+","+curr.isDefault());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (null != writer) {
+				writer.close();
+			}
 		}
 	}
 
